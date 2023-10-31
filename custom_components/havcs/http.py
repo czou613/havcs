@@ -234,7 +234,10 @@ class HavcsTokenView(HomeAssistantView):
                 result['expires_in'] = int(self._expiration.total_seconds())
                 _LOGGER.debug("[%s][auth] get access token[%s] with default expiration, try to update expiration param and get new access token through another refresh token request.", LOGGER_NAME, result.get('access_token'))
                 access_token = result.get('access_token')
-                await havcs_util.async_update_token_expiration(access_token, self._hass, self._expiration)
+                done = await havcs_util.async_update_token_expiration(access_token, self._hass, self._expiration)
+                if not done:
+                    _LOGGER.error("[%s][auth] update token expiration failed.", LOGGER_NAME, self._token_url)
+                    return web.Response(status=500)
 
                 try:
                     refresh_token_data = {'client_id': data.get('client_id'), 'grant_type': 'refresh_token', 'refresh_token': result.get('refresh_token')}
