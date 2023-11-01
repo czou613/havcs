@@ -152,11 +152,11 @@ class VoiceControlProcessor:
                     except (vol.Invalid, ServiceNotFound):
                         _LOGGER.error("[%s] %s @task_%s: failed to call service\n%s", LOGGER_NAME, entity_id, i, traceback.format_exc())
                     else:
-                        if result:
+                        #if result:
                             _LOGGER.debug("[%s] %s @task_%s: success to call service, new state = %s", LOGGER_NAME, entity_id, i, self._hass.states.get(entity_id))
                             success_task.append({entity_id: [domain_list[i], service_list[i], data_list[i]]})
-                        else:
-                            _LOGGER.debug("[%s] %s @task_%s: failed to call service", LOGGER_NAME, entity_id, i)
+                        #else:
+                        #    _LOGGER.debug("[%s] %s @task_%s: failed to call service %s", LOGGER_NAME, entity_id, i, result)
                     changed_states = []
                     for state in self._hass.states.async_all():
                         if state.context is CONTEXT:
